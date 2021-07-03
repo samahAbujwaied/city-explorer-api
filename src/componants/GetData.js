@@ -1,10 +1,10 @@
-// require("dotenv").config();
 import React, { Component } from 'react'
 import axios from 'axios'
 import AleartMessage from './AleartMessage'
 import {Form,Button} from 'react-bootstrap'
 // import '../style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+require("dotenv").config();
 
  
 
@@ -61,7 +61,9 @@ export class GetData extends Component {
 
         try{
             e.preventDefault()
-           let axiosWeather = await axios.get(`${process.env.REACT_APP_SERVER }/weather?lat=${this.state.lat}&lon=${this.state.lon}`)
+           let axiosWeather = await axios.get(`${process.env.REACT_APP_SERVER }/weather?`)
+           console.log(axiosWeather);
+           console.log(process.env.REACT_APP_SERVER)
            this.setState({
                dataweth:axiosWeather.data,          
            })
