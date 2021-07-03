@@ -61,10 +61,9 @@ export class GetData extends Component {
 
         try{
             e.preventDefault()
-           let axiosWeather = await axios.get(`http://localhost:8000/weather?key=${process.env.KYE}&lat=${this.state.lat}&lon=${this.state.lon}`)
+           let axiosWeather = await axios.get(`${process.env.REACT_APP_SERVER }/weather?lat=${this.state.lat}&lon=${this.state.lon}`)
            this.setState({
-               dataweth:axiosWeather.data,
-            //    showdataweth:true
+               dataweth:axiosWeather.data,          
            })
         }
         catch{
