@@ -19,7 +19,8 @@ export class GetData extends Component {
             alertmess: false,
             imgMap:'',
             dataweth:[],
-            showdataweth:false
+            showdataweth:false,
+            movieData: [],
         }
     }
     gitCityName = (e) => {
@@ -27,29 +28,27 @@ export class GetData extends Component {
             dispName: e.target.value,
         })
     }
+    
 
     handelSubmit = async (e) => {
-        // e.preventDefault()
-        try {
-            e.preventDefault()
-            let axiosData = await axios.get(`https://eu1.locationiq.com/v1/search.php?key=pk.72479576e80a134c898131754a3ccdee&q=${this.state.dispName}&format=json`)
-           
+        e.preventDefault()
+        let wethwerURL = `${process.env.REACT_APP_SERVER }/weather?city_name=${this.state.dispName}`
+        let movieURL = `${process.env.REACT_APP_SERVER }/movie?query=${this.state.dispName}&limit=5`
+        try {    
+            let axiosData = await axios.get(`https://eu1.locationiq.com/v1/search.php?key=pk.72479576e80a134c898131754a3ccdee&q=${this.state.dispName}&format=json`) 
             this.setState({
                 dispName: axiosData.data[0].display_name,
                 lon: axiosData.data[0].lon,
                 lat: axiosData.data[0].lat,
                 display: true,
                 alertmess: false,
-                showdataweth:true
-
+                showdataweth:true,
+                
             })
-
             let axiosMap = await axios.get(`https://maps.locationiq.com/v3/staticmap?key=pk.72479576e80a134c898131754a3ccdee&q&center=${this.state.lat},${this.state.lon}&zoom=10`)
             this.setState({
-                imgMap:axiosMap.config.url,
-                 showdataweth:true
+                imgMap:axiosMap.config.url
             })
-
         }
         catch {
             this.setState({
@@ -59,23 +58,28 @@ export class GetData extends Component {
             })
         }
 
-        try{
-            e.preventDefault()
-           let axiosWeather = await axios.get(`${process.env.REACT_APP_SERVER }/weather?`)
+      
+           try {const axiosWeather = await axios.get(wethwerURL)
            console.log(axiosWeather);
            console.log(process.env.REACT_APP_SERVER)
            this.setState({
-               dataweth:axiosWeather.data,          
-           })
-        }
-        catch{
+               dataweth:axiosWeather.data, 
+               showdataweth:true 
+           })}
+           catch{
             this.setState({
-                
-                showdataweth:false
+                showdataweth:false,
+                alertmess: true,
+                display:false
             })
-        }
+        
+            const movieReq = await axios.get(movieURL);
+            this.setState({
+              movieData: movieReq.data,
+            })
+      
     }
-
+    }
     render() {
         return (
             <div style={{margin:'auto' }} >
@@ -92,10 +96,11 @@ export class GetData extends Component {
                 <div style={{ textAlign:'center',marginTop:'50px',color:'green' , fontFamily:'cursive'}} >
 
                 
-                <h4>{this.state.dispName}</h4>
-                <h4>{this.state.lon}</h4>
-                <h4>{this.state.lat}</h4>
+                
                 {this.state.display && <div>
+                    <h4>{this.state.dispName}</h4>
+                   <h4>{this.state.lon}</h4>
+                    <h4>{this.state.lat}</h4>
                     <img src={this.state.imgMap} rounded="true" />
                 </div>}
                 
@@ -109,6 +114,10 @@ export class GetData extends Component {
                         );
                     })
                 } 
+               { this.state.display &&
+         
+                 <h1 movieData={this.state.movieData} />
+                }
                 </div>
               
 
