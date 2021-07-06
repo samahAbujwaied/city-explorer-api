@@ -22,12 +22,12 @@ class App extends React.Component {
   }
 
   getLocation = async (e) => {
-    e.preventDefault();
-
-    const serverRoute = process.env.REACT_APP_SERVER;
-    let weatherURL = `http://localhost:4500/weather?searchQuery=${this.state.citySearched}`;
+    e.preventDefault();   
+    const serverRoute = process.env.REACT_APP_BACKEND ;
+    console.log(serverRoute);
+    let weatherURL = `${serverRoute}/weather?searchQuery=${this.state.citySearched}`;
     let LocUrl = `https://eu1.locationiq.com/v1/search.php?key=${this.state.apiKey} &q=${this.state.citySearched}&format=json`;
-    let movieURL = `http://localhost:4500/movie?query=${this.state.citySearched}&limit=5`
+    let movieURL = `${serverRoute}/movie?query=${this.state.citySearched}&limit=5`
 
     try {
       const locResult = await axios.get(LocUrl);
