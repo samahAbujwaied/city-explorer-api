@@ -9,6 +9,5 @@ class WeatherDay extends Component {
             </>
         )
     }
-    
 }
 export default WeatherDay
